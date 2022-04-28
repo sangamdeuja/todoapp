@@ -1,4 +1,3 @@
-
 import express from 'express';
 import cors from 'cors';
 import pool from './db.js';
@@ -13,7 +12,7 @@ app.use(express.json());
 //console.log(process.env.RDS_PORT)
 // routes
 // create a todo
-app.post("/todos",async(req,res)=>{
+app.post("/api/todos",async(req,res)=>{
     try {
         const {description}=req.body;
         const newTodo= await pool.query("INSERT INTO todo (description) VALUES($1) RETURNING *",[description])
@@ -26,7 +25,7 @@ app.post("/todos",async(req,res)=>{
     }
 })
 // get all todo
-app.get("/todos",async(req,res)=>{
+app.get("/api/todos",async(req,res)=>{
     try {
         const allTodos= await pool.query("SELECT * FROM todo")
         res.json(allTodos.rows)
@@ -37,7 +36,7 @@ app.get("/todos",async(req,res)=>{
     }
 })
 // get specific todo
-app.get("/todos/:id",async(req,res)=>{
+app.get("/api/todos/:id",async(req,res)=>{
     try {
         const {id}=req.params;
         const todo_id= await pool.query("SELECT * FROM todo WHERE todo_id=$1",[id])
@@ -50,7 +49,7 @@ app.get("/todos/:id",async(req,res)=>{
 })
 
 // update a todo
-app.put("/todos/:id",async(req,res)=>{
+app.put("/api/todos/:id",async(req,res)=>{
     try {
         const {id}=req.params;
         const {description}=req.body;
@@ -61,7 +60,7 @@ app.put("/todos/:id",async(req,res)=>{
     }
 })
 // delete a todo
-app.delete("/todos/:id",async(req,res)=>{
+app.delete("/api/todos/:id",async(req,res)=>{
     try {
         const {id}=req.params;
         const deleteTodo= await pool.query(" DELETE FROM todo WHERE todo_id=$1",[id])
@@ -76,7 +75,3 @@ app.delete("/todos/:id",async(req,res)=>{
 app.listen(3001,()=>{
     console.log("server started in port 3001")
 });
-
-
-
-
